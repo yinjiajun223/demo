@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>演示中心</title>
+    <link rel="icon" type="image/svg+xml" href="./favicon.ico" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(120deg, #f6f7f8 0%, #e9ebee 100%);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+      }
+
+      .container {
+        text-align: center;
+        padding: 3rem;
+        animation: floatUp 1.2s ease-out;
+      }
+
+      h1 {
+        color: #2c3e50;
+        font-size: 2.8rem;
+        font-weight: 300;
+        margin-bottom: 3rem;
+        animation: slideDown 1s ease-out;
+        position: relative;
+        display: inline-block;
+      }
+
+      h1::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #2c3e50, transparent);
+        transform: scaleX(0);
+        animation: titleLine 1.5s ease-out forwards;
+        animation-delay: 0.5s;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .demo-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out backwards;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+      }
+
+      .demo-card:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .demo-card:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .demo-card:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+      .demo-card:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+
+      .demo-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .demo-card h2 {
+        color: #2c3e50;
+        margin: 0 0 1rem 0;
+        font-size: 1.5rem;
+        position: relative;
+      }
+
+      .demo-card h2::after {
+        content: "";
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #2c3e50;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .demo-card:hover h2::after {
+        width: 50%;
+      }
+
+      .demo-card p {
+        color: #666;
+        margin: 0 0 1.5rem 0;
+        line-height: 1.6;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        color: #2c3e50;
+        background: transparent;
+        border: 2px solid #2c3e50;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .btn:hover {
+        color: white;
+        background: #2c3e50;
+        transform: translateY(-2px);
+      }
+
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: #2c3e50;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease, height 0.6s ease;
+        z-index: -1;
+      }
+
+      .btn:hover::before {
+        width: 300%;
+        height: 300%;
+      }
+
+      .demo-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          120deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.8) 50%,
+          transparent 70%
+        );
+        transform: translateX(-100%);
+        transition: none;
+        z-index: 1;
+        border-radius: 12px;
+      }
+
+      .demo-card:hover::before {
+        animation: shine 1.5s ease-out;
+      }
+
+      .demo-card:hover p {
+        transform: translateY(-3px);
+        transition: transform 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideDown {
+        from {
+          transform: translateY(-20px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes shine {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      @keyframes floatUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes titleLine {
+        to {
+          transform: scaleX(1);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 2rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        .demo-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>演示中心</h1>
+      <div class="demo-grid">
+        <div class="demo-card">
+          <h2>音频演示</h2>
+          <p>体验各种音频效果和处理技术的演示</p>
+          <a href="./audio.html" class="btn">查看演示</a>
+        </div>
+        <div class="demo-card">
+          <h2>Grid动画</h2>
+          <p>探索丰富的视觉动画和交互效果</p>
+          <a href="./grid-animation.html" class="btn">查看演示</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

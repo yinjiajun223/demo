@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>原生音频API将赋予前端新的能力，你能想到的音频处理都能实现</title>
+    
+  </head>
+  <style>
+    body {
+      background-color: #000;
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      width: 100%;
+      height: 300px;
+      filter: drop-shadow(0 0 10px rgba(0, 140, 140, 0.5));
+    }
+    /* 居中 */
+    audio {
+      display: block;
+      margin: 0 auto;
+      margin-top: 24px;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #000000, #1a1a1a);
+      padding: 10px;
+      box-shadow: 0 0 15px rgba(0, 140, 140, 0.3);
+    }
+
+    /* 添加背景动画 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #000 0%, #001414 100%);
+      z-index: -1;
+      animation: pulse 8s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 0.8;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+  </style>
+  <body>
+    <canvas></canvas>
+    <audio src="./audio.mp3" controls></audio>
+    <script>
+      let isInit = false;
+      let dataArray, analyser;
+
+      const audio = document.querySelector("audio");
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+
+      function init() {
+        canvas.width = window.innerWidth * devicePixelRatio;
+        canvas.height = (window.innerHeight / 2) * devicePixelRatio;
+      }
+
+      init();
+
+      audio.onplay = () => {
+        //初始化
+        if (isInit) {
+          return;
+        }
+
+        const audioContext = new AudioContext(); //创建音频上下文
+        const source = audioContext.createMediaElementSource(audio); //创建音频源节点 -- 音频处理的一个环节
+        analyser = audioContext.createAnalyser(); //创建分析器
+        analyser.fftSize = 512; //设置分析器FFT大小
+        //创建数组，用于存储分析器数据
+        dataArray = new Uint8Array(analyser.frequencyBinCount); // analyser.frequencyBinCount = 512 / 2
+        source.connect(analyser); //连接音频源和分析器
+        analyser.connect(audioContext.destination); //连接分析器和音频输出
+
+        isInit = true;
+      };
+
+      //把分析出的波形数据绘制到canvas上
+      function draw() {
+        requestAnimationFrame(draw);
+
+        const width = canvas.width;
+        const height = canvas.height;
+        ctx.clearRect(0, 0, width, height);
+
+        if (!isInit) {
+          return;
+        }
+
+        analyser.getByteFrequencyData(dataArray);
+
+        const len = dataArray.length / 2.5;
+        const barWidth = width / len / 2;
+
+        // 创建渐变色
+        const gradient = ctx.createLinearGradient(0, height, 0, 0);
+        gradient.addColorStop(0, "#00ffff");
+        gradient.addColorStop(0.5, "#008c8c");
+        gradient.addColorStop(1, "#004444");
+        ctx.fillStyle = gradient;
+
+        dataArray.forEach((item, index) => {
+          const barHeight = (item / 255) * height;
+          const x = index * barWidth + width / 2;
+          const x2 = width / 2 - (index + 1) * barWidth;
+          const y = height - barHeight;
+
+          // 添加圆角效果
+          ctx.beginPath();
+          ctx.roundRect(x, y, barWidth - 2, barHeight, 5);
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.roundRect(x2, y, barWidth - 2, barHeight, 5);
+          ctx.fill();
+
+          // 添加光晕效果
+          ctx.fillStyle = `rgba(0, 255, 255, ${(item / 255) * 0.1})`;
+          ctx.beginPath();
+          ctx.roundRect(x, y - 5, barWidth - 2, barHeight + 10, 5);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.roundRect(x2, y - 5, barWidth - 2, barHeight + 10, 5);
+          ctx.fill();
+
+          // 重置填充样式为渐变色
+          ctx.fillStyle = gradient;
+        });
+      }
+
+      draw();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>网格布局中的动画</title>
+  </head>
+  <style>
+    .container {
+      width: 400px;
+      height: 400px;
+      margin: 0 auto;
+      margin-top: 50px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .items:nth-child(1) { background-color: #FF6B6B; }
+    .items:nth-child(2) { background-color: #4ECDC4; }
+    .items:nth-child(3) { background-color: #FFE66D; }
+    .items:nth-child(4) { background-color: #FF8B94; }
+    .items:nth-child(5) { background-color: #96CEB4; }
+    .items:nth-child(6) { background-color: #88D8B0; }
+    .items:nth-child(7) { background-color: #FF9F1C; }
+    .items:nth-child(8) { background-color: #6C88C4; }
+    .items:nth-child(9) { background-color: #C38D9E; }
+  </style>
+  <body>
+    <div class="container">
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+      <div class="items"></div>
+    </div>
+  </body>
+</html>
